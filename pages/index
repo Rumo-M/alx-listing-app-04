@@ -1,5 +1,7 @@
-import axios from "axios";
+// pages/index.tsx
+
 import { useEffect, useState } from "react";
+import axios from "axios";
 import PropertyCard from "@/components/property/PropertyCard";
 
 interface Property {
@@ -8,6 +10,7 @@ interface Property {
   location: string;
   price: number;
   image: string;
+  // Add more fields as needed from your API
 }
 
 export default function Home() {
@@ -18,11 +21,13 @@ export default function Home() {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/properties`);
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/properties`
+        );
         setProperties(response.data);
       } catch (err) {
-        setError("Failed to fetch properties.");
         console.error("Error fetching properties:", err);
+        setError("Failed to load properties. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -31,11 +36,11 @@ export default function Home() {
     fetchProperties();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading) return <p>Loading properties...</p>;
+  if (error) return <p className="text-red-600">{error}</p>;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
       {properties.map((property) => (
         <PropertyCard key={property.id} property={property} />
       ))}
